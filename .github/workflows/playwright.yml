@@ -1,4 +1,4 @@
-name: Playwright Test
+name: Playwright QA Automation
 
 on:
   push:
@@ -9,18 +9,32 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 1️⃣ Checkout repository
       - name: Checkout Repository
         uses: actions/checkout@v3
 
+      # 2️⃣ Show files (DEBUG - helps verify file location)
+      - name: Show Repository Structure
+        run: ls -R
+
+      # 3️⃣ Setup Python
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
 
+      # 4️⃣ Install Playwright + Browsers
       - name: Install Playwright
         run: |
           pip install playwright
           playwright install --with-deps
 
+      # 5️⃣ Run script (FIXED)
       - name: Run Script - 23f1002633@ds.study.iitm.ac.in
-        run: python sum_tables.py
+        run: |
+          if [ -f "sum_tables.py" ]; then
+              python sum_tables.py
+          else
+              echo "sum_tables.py not found!"
+              exit 1
+          fi
